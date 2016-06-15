@@ -1,0 +1,115 @@
+<div class=" text-xs-center text-lg-center text-md-center col-xs-12 col-sm-12 col-md-8 col-lg-offset-2 col-lg-8">
+
+    <div class="card ">
+        <div class="card-header card-inverse card-info">
+            {{selecteddealer}} 3S Auto Customer Service
+        </div>
+        <div class="card-block radio form-inline">
+            <input class="form-control" required [(ngModel)]="phone" (change)="customeruid = ''" placeholder="Phone" (keyup.enter)="doneTypingPhone(phone)">
+            <button class="btn btn-primary-outline btn-sm" [disabled]="!phone" (click)="doneTypingPhone(phone)">Go</button>
+            <button class="btn btn-primary-outline btn-sm" (click)="clean()">Clear All</button>
+            <br *ngIf="phone && checked" />
+            <input *ngIf="phone && checked" class="form-control" required [(ngModel)]="fname" placeholder="First name">
+            <input *ngIf="phone && checked" class="form-control" required [(ngModel)]="lname" placeholder="Last name" (keyup.enter)="doneTypingLname($event)">
+            <button *ngIf="phone && checked" class="btn btn-primary-outline btn-sm" (click)="SaveCustomer(fname,lname,phone,'')">Register</button>
+        </div>
+        <div *ngIf="errmsg" class="card-footer card-inverse card-warning">
+            {{errmsg}}
+        </div>
+        <div *ngIf="customeruid">
+            <div class="card-header card-inverse card-info">
+                {{selecteddealer}} Shuttle Service
+            </div>
+            <div class="card-block radio form-inline">
+                <div class="input-group">
+                    <input type="text" id="input-search" class="form-control" [(ngModel)]="address" (keyup.enter)="search(address)" placeholder="Address">
+                    <div *ngIf="address" class="input-group-btn">
+                        <button type="button" class="btn btn-fab-outline btn-fab-mini btn-sm" title="search" (click)="search(address)">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                    </button>
+
+                        <button *ngIf="showmap" class="btn btn-primary-outline btn-sm" (click)="showmap = false"><<</button>
+                    </div>
+                </div>
+                <div *ngIf="address && showmap">
+                    <sebm-google-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false">
+                        <sebm-google-map-marker [latitude]="lat" [longitude]="lng" [label]="fname" [markerDraggable]="false">
+                            <sebm-google-map-info-window>
+                                <strong>{{fname}}</strong>
+                            </sebm-google-map-info-window>
+                        </sebm-google-map-marker>
+                    </sebm-google-map>
+                    <label>
+                    <input type="checkbox" [(ngModel)]="pickup">
+                        Need Pick Up?
+                    </label>
+                    <input *ngIf="pickup" class="form-control" [(ngModel)]="pickupcomment" placeholder="Pickup comment">
+                    <button class="btn btn-primary-outline btn-sm" [disabled]="!(fname && lname && phone && address)" (click)="signupShuttle(fname, lname,phone,address,pickup,pickuptime,pickupcomment)">
+                        Book shuttle
+                    </button>
+                    <div *ngIf="pickup" class=" text-xs-center text-lg-center">
+                        <timepicker [showSpinners]="isspinner" [minuteStep]="30" [(ngModel)]="pickuptime" [showMeridian]="ismeridian"></timepicker>
+                    </div>
+                    <div *ngIf="bookmsg" style="color:green">
+                        {{bookmsg}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="customeruid">
+            <div class="card-header card-inverse card-info">
+                {{selecteddealer}} Car business
+            </div>
+            <div class="card-block radio form-inline">
+                <tabset>
+                    <tab *ngFor="let d of cars | async" [heading]="d.car" [active]="true" (select)="loadCar(d)">
+                    </tab>
+                    <tab class="pull-right" heading="New" (select)="carname = ''"></tab>
+                </tabset>
+                <input class="form-control" [(ngModel)]="carname" placeholder="Car name">
+                <button class="btn btn-primary-outline btn-sm" [disabled]="!phone || !carname" (click)="deleteCar(carname)">Delete car</button><br>
+            </div>
+        </div>
+        <div *ngIf="carname && customeruid">
+
+            <div class="card-header card-inverse card-info">
+                {{fname}}'s {{carname}} next oil change
+            </div>
+            <div class="card-block radio form-inline">
+
+                <input class="form-control" [(ngModel)]="changemile" placeholder="Next oil change Mileage">
+                <input class="form-control" [(ngModel)]="changedatestr" placeholder="Next oil change Date" (change)="loadChangeDate(changedatestr)">
+                <button class="btn btn-primary-outline btn-sm" *ngIf="!switchoildate" (click)="switchoildate = !switchoildate">>></button>
+                <button class="btn btn-primary-outline btn-sm" *ngIf="switchoildate" (click)="switchoildate = !switchoildate"><<</button><br>
+
+                <div style="display:inline-block; min-height:290px;" *ngIf="switchoildate">
+                    <datepicker [(ngModel)]="changedate" [minDate]="minDate" [showWeeks]="true" (click)="setChangeDate(changedate)"></datepicker>
+                </div>
+                <button class="btn btn-primary-outline btn-sm" [disabled]="!( phone && (changemile || changedate ))" (click)="saveOilChange(phone,changemile,changedatestr,fname,lname,address)">Save next oil change</button>
+                <div *ngIf="oilmsg" style="color:green">
+                    {{oilmsg}}
+                </div>
+            </div>
+
+            <div class="card-header card-inverse card-info">
+                {{fname}}'s {{carname}} next tire change date
+            </div>
+
+            <div class="card-block radio form-inline">
+
+                <input class="form-control" [(ngModel)]="changetiredatestr" placeholder="Next tire change Date" (change)="loadChangeTireDate(changetiredatestr)">
+                <button class="btn btn-primary-outline btn-sm" *ngIf="!swicthtiredate" (click)="swicthtiredate = !swicthtiredate">>></button>
+                <button class="btn btn-primary-outline btn-sm" *ngIf="swicthtiredate" (click)="swicthtiredate = !swicthtiredate"><<</button>
+                <br>
+                <div style="display:inline-block; min-height:290px;" *ngIf="swicthtiredate">
+                    <datepicker [(ngModel)]="changetiredate" [minDate]="minDate" [showWeeks]="true" (click)="setChangeTireDate(changetiredate)"></datepicker>
+                </div>
+
+                <button class="btn btn-primary-outline btn-sm" [disabled]="!( phone  && changetiredate)" (click)="saveTireChange(phone, changetiredatestr,fname,lname,address)">Save next tire switch</button>
+                <div *ngIf="tiremsg" style="color:green">
+                    {{tiremsg}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

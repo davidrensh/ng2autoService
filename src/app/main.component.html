@@ -1,0 +1,17 @@
+<div>
+
+    <div class="container">
+        <router-outlet></router-outlet>
+    </div>
+
+    <div class="container">
+        <nav class="navbar navbar-bottom " role="navigation">
+            <ul class="nav navbar-nav">
+                <li class="nav-item"> <a [routerLink]="['/home/Login']">Home</a> </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li class="nav-item"> <a [routerLink]="['/admin']">Admin</a> </li>
+            </ul>
+        </nav>
+    </div>
+</div>

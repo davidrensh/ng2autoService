@@ -1,0 +1,52 @@
+<div class=" text-xs-center text-lg-center text-md-center col-xs-12 col-sm-12 col-md-8 col-lg-offset-2 col-lg-8">
+
+    <div class="card ">
+        <div class="card-header card-inverse card-info">
+            {{selecteddealer}} 3S Auto Customer Service - Booking ({{phone}})
+        </div>
+        <div>
+
+            <div [hidden]="!show">
+                <table class="table table-bordered  table-sm">
+                    <tr>
+                        <th> First</th>
+                        <th> Last</th>
+                        <th> Phone</th>
+                        <th>Car</th>
+                        <th>Comment</th>
+                        <th>Schedule</th>
+                        <th>Via</th>
+                    </tr>
+                    <tr *ngFor="let kk of Jobs | async">
+                        <td> {{kk.fname }}</td>
+                        <td> {{kk.lname }} </td>
+                        <td> {{kk.phone }} </td>
+                        <td> {{kk.car}} </td>
+                        <td> {{kk.mycomment}} </td>
+                        <td> <span class="form-inline radio">
+                            <input [hidden]="kk.processed" class="form-control" [(ngModel)]="bookedchangedate" placeholder="Date" (change)="loadChangeDate(bookedchangedate)">
+                            <input [hidden]="kk.processed" class="form-control" [(ngModel)]="comment" placeholder="Comment" >
+                            <label [hidden]="!kk.processed">{{kk.bookedchangedate}}</label>
+                            <button [hidden]="kk.processed" class="btn btn-primary-outline btn-sm" *ngIf="!switchoildate" (click)="switchoildate = !switchoildate">>></button>
+                            <button [hidden]="kk.processed" class="btn btn-primary-outline btn-sm" *ngIf="switchoildate" (click)="switchoildate = !switchoildate"><<</button><br>
+                            <div  [hidden]="kk.processed" style="display:inline-block; min-height:290px;" *ngIf="switchoildate">
+                                <datepicker [(ngModel)]="changedate" [minDate]="minDate" [showWeeks]="true" (click)="setChangeDate(changedate)"></datepicker>
+                            </div>
+                            <button class="btn btn-primary-outline btn-sm" [disabled]="!bookedchangedate" [hidden]="kk.processed" (click)="process(kk)">Process</button>
+                            </span>
+                        </td>
+                        <td>
+                            {{kk.processedby}}
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-muted">
+            <label *ngFor="let d of RptDates | async">
+                        <input class="radio-inline" type="radio" name="nDrivers" (click)="selectDate(d.$key)" checked="checked"> {{d.$key }} &nbsp; &nbsp;
+             </label>
+        </div>
+    </div>
+</div>

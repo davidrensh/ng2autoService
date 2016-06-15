@@ -1,0 +1,36 @@
+
+<div>
+    <div class="container">
+        <nav  class="navbar  navbar-light bg-faded">
+            <ul class="nav navbar-nav"  >
+                <li   class="nav-item">  <a *ngIf="rs.role === 0" [routerLink]="['/admin/AdminLogin']">Login</a>                                             </li>
+                                            
+                <li   class="nav-item">  <a *ngIf="rs.role === 0" [routerLink]="['/admin/Signup']">Sign Up</a>                                          </li>
+
+                    <li *ngIf="rs.role >= 2" class="nav-item">  <a [routerLink]="['/admin/DriverHome']">Shuttle</a>                                                 </li>
+
+                    <li *ngIf="rs.role >= 3" class="nav-item">  <a [routerLink]="['/admin/EmployeeHome']">Service</a>                                               </li>
+                    <li *ngIf="rs.role >= 3" class="nav-item">  <a [routerLink]="['/admin/Booking']">Booking</a>                                               </li>
+
+                    <li *ngIf="rs.role === 4" class="nav-item">  <a [routerLink]="['/admin/Drivers']">Drivers</a>                                                  </li>
+                    <li *ngIf="rs.role === 4" class="nav-item">  <a [routerLink]="['/admin/Employees']">Employees</a>                                                  </li>
+                    <li *ngIf="rs.role === 4" class="nav-item">  <a [routerLink]="['/admin/Report']">Report</a>                                                  </li>
+
+
+                <li class="nav-item">  <a [routerLink]="['/admin/About']">About</a>                                                                 </li>
+            </ul>
+
+            <div class="form-inline pull-right">
+                {{rs.fname}} {{rs.lname}}
+                <span class="glyphicon glyphicon-cog"></span>
+                <button *ngIf="rs.role > 0" class="btn btn-success-outline btn-sm"  (click)="logout()">Logout</button>
+            </div>
+        </nav>
+    </div>
+    <div>
+    <div style="height: 40px"></div>
+        <div class="container">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>

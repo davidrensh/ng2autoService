@@ -1,0 +1,69 @@
+<div class=" text-xs-center text-lg-center text-md-center col-xs-12 col-sm-12 col-md-8 col-lg-offset-2 col-lg-8">
+
+    <div class="card ">
+        <div class="card-header card-inverse card-info">
+            {{selecteddealer}} 3S Auto Customer Service - Shuttle ({{phone}})
+            <button class="btn btn-primary-outline btn-sm pull-right" *ngIf="!show" (click)="show = !show">>></button>
+            <button class="btn btn-primary-outline btn-sm pull-right" *ngIf="show" (click)="show = !show"><<</button>
+            <button class="btn btn-primary-outline btn-sm pull-right" (click)="setshowall()">{{showallButtonFace}}</button>
+        </div>
+
+        <div>
+
+            <div [hidden]="!show">
+                <table  class="table table-bordered  table-sm">
+                    <tr>
+                        <th> First</th>
+                        <th> Last</th>
+                        <th> Phone</th>
+                        <th>Address</th>
+                        <th>Pickup?</th>
+                        <th>Drop</th>
+                        <th>Drop By</th>
+                        <th>Drop Time</th>
+                        <th>Pickup</th>
+                        <th>Pickup By</th>
+                        <th>Pickup Time</th>
+                    </tr>
+                    <tr *ngFor="let kk of Jobs | async">
+                        <td> {{kk.fname }}</td>
+                        <td> {{kk.lname }} </td>
+                        <td> {{kk.phone }} </td>
+                        <td> {{kk.address}} </td>
+                        <td>
+                            <label *ngIf="kk.pickup" [style.color]="kk.pickup ? 'red' : 'green'">Yes </label>
+                            <label *ngIf="!kk.pickup" [style.color]="kk.pickup ? 'red' : 'green'">No </label>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary-outline btn-sm" [hidden]="kk.dropoffdone" (click)="dropoffCustomer(kk)">Dropoff</button>
+                        </td>
+                        <td>
+                            {{kk.dropby}}
+                        </td>
+                        <td>
+                            {{kk.droptime}}
+                        </td>                        
+                        <td>
+                            <button class="btn btn-primary-outline btn-sm" [hidden]="!kk.pickup || (kk.pickup && kk.pickupdone)" [disabled]="!kk.dropoffdone" (click)="pickupCustomer(kk)">Pickup</button>
+                        </td>
+                        <td>
+                            {{kk.pickupby}}
+                        </td>
+                        <td>
+                            {{kk.pickuptime}}
+                        </td>                        
+                    </tr>
+
+                </table>
+            </div>
+            <div>
+                <sebm-google-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" [disableDefaultUI]="false" [zoomControl]="false">
+                    <sebm-google-map-marker *ngFor="let m of Jobs | async" [latitude]="m.lat" [longitude]="m.lng" [label]="m.name" [markerDraggable]="false">
+                        <sebm-google-map-info-window>
+                            <strong>{{m.fname}} @ {{m.address}}</strong>
+                        </sebm-google-map-info-window>
+                    </sebm-google-map-marker>
+                </sebm-google-map>
+            </div>
+
+        </div>
