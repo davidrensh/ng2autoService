@@ -8,9 +8,9 @@ const map: any = {
   'angular2-google-maps': 'vendor/angular2-google-maps',
   'ng2-bootstrap': 'vendor/ng2-bootstrap'
   //,
-  // 'angular2-in-memory-web-api': 'https://npmcdn.com/angular2-in-memory-web-api', // get latest
-  // 'angular2-datatable':         'https://npmcdn.com/angular2-datatable@0.4.0'
-  // 'lodash':                     'https://npmcdn.com/lodash@4.6.1/lodash.js'
+  // 'angular2-in-memory-web-api': 'https://unpkg.com/angular2-in-memory-web-api', // get latest
+  // 'angular2-datatable':         'https://unpkg.com/angular2-datatable@0.4.0'
+  // 'lodash':                     'https://unpkg.com/lodash@4.6.1/lodash.js'
 };
 
 /** User packages configuration. */
